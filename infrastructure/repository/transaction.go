@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/gadfaria/code-pix/domain/model"
+	"github.com/gadfaria/codepix/domain/model"
 	"gorm.io/gorm"
 )
 

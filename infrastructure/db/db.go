@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/gadfaria/code-pix/domain/model"
+	"github.com/gadfaria/codepix/domain/model"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"

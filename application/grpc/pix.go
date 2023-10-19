@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	"github.com/gadfaria/code-pix/application/grpc/pb"
-	"github.com/gadfaria/code-pix/application/usecase"
+	"github.com/gadfaria/codepix/application/grpc/pb"
+	"github.com/gadfaria/codepix/application/usecase"
 )
 
 type PixGrpcService struct {

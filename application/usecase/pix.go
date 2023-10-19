@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/gadfaria/code-pix/domain/model"
+import "github.com/gadfaria/codepix/domain/model"
 
 type PixUseCase struct {
 	PixKeyRepository model.PixKeyRepositoryInterface

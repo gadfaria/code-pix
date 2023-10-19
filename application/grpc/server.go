@@ -5,9 +5,9 @@ import (
 	"log"
 	"net"
 
-	"github.com/gadfaria/code-pix/application/grpc/pb"
-	"github.com/gadfaria/code-pix/application/usecase"
-	"github.com/gadfaria/code-pix/infrastructure/repository"
+	"github.com/gadfaria/codepix/application/grpc/pb"
+	"github.com/gadfaria/codepix/application/usecase"
+	"github.com/gadfaria/codepix/infrastructure/repository"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"gorm.io/gorm"

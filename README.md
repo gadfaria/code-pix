@@ -1,4 +1,4 @@
-# code-pix
+# codepix
 
 * Docker
 * Golang
@@ -26,3 +26,7 @@ protoc --go_out=application/grpc/pb --go_opt=paths=source_relative --go-grpc_out
 go run cmd/main.go
 
 evans -r repl
+
+go run main.go
+
+go run main.go grpc

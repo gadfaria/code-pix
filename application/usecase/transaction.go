@@ -3,7 +3,7 @@ package usecase
 import (
 	"errors"
 
-	"github.com/gadfaria/code-pix/domain/model"
+	"github.com/gadfaria/codepix/domain/model"
 )
 
 type TransactionUseCase struct {

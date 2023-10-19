@@ -12,7 +12,7 @@ type PixGrpcService struct {
 	pb.UnimplementedPixServiceServer
 }
 
-func (p *PixGrpcService) RegisterPixKey(ctx context.Context, in *pb.PixKeyRegistration) (*pb.PixKeyCreatedResult, error) {
+func (p *PixGrpcService) Register(ctx context.Context, in *pb.PixKeyRegistration) (*pb.PixKeyCreatedResult, error) {
 	pixKey, err := p.PixUseCase.RegisterKey(in.Key, in.Kind, in.AccountId)
 
 	if err != nil {
@@ -28,7 +28,7 @@ func (p *PixGrpcService) RegisterPixKey(ctx context.Context, in *pb.PixKeyRegist
 	}, nil
 }
 
-func (p *PixGrpcService) FindPixKey(ctx context.Context, in *pb.PixKey) (*pb.PixKeyInfo, error) {
+func (p *PixGrpcService) Find(ctx context.Context, in *pb.PixKey) (*pb.PixKeyInfo, error) {
 	pixKey, err := p.PixUseCase.FindKey(in.Key, in.Kind)
 	if err != nil {
 		return &pb.PixKeyInfo{}, err

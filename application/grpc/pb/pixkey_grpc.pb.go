@@ -19,16 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PixService_RegisterPixKey_FullMethodName = "/codepix.PixService/RegisterPixKey"
-	PixService_FindPixKey_FullMethodName     = "/codepix.PixService/FindPixKey"
+	PixService_Register_FullMethodName = "/codepix.PixService/Register"
+	PixService_Find_FullMethodName     = "/codepix.PixService/Find"
 )
 
 // PixServiceClient is the client API for PixService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PixServiceClient interface {
-	RegisterPixKey(ctx context.Context, in *PixKeyRegistration, opts ...grpc.CallOption) (*PixKeyCreatedResult, error)
-	FindPixKey(ctx context.Context, in *PixKey, opts ...grpc.CallOption) (*PixKeyInfo, error)
+	Register(ctx context.Context, in *PixKeyRegistration, opts ...grpc.CallOption) (*PixKeyCreatedResult, error)
+	Find(ctx context.Context, in *PixKey, opts ...grpc.CallOption) (*PixKeyInfo, error)
 }
 
 type pixServiceClient struct {
@@ -39,18 +39,18 @@ func NewPixServiceClient(cc grpc.ClientConnInterface) PixServiceClient {
 	return &pixServiceClient{cc}
 }
 
-func (c *pixServiceClient) RegisterPixKey(ctx context.Context, in *PixKeyRegistration, opts ...grpc.CallOption) (*PixKeyCreatedResult, error) {
+func (c *pixServiceClient) Register(ctx context.Context, in *PixKeyRegistration, opts ...grpc.CallOption) (*PixKeyCreatedResult, error) {
 	out := new(PixKeyCreatedResult)
-	err := c.cc.Invoke(ctx, PixService_RegisterPixKey_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, PixService_Register_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *pixServiceClient) FindPixKey(ctx context.Context, in *PixKey, opts ...grpc.CallOption) (*PixKeyInfo, error) {
+func (c *pixServiceClient) Find(ctx context.Context, in *PixKey, opts ...grpc.CallOption) (*PixKeyInfo, error) {
 	out := new(PixKeyInfo)
-	err := c.cc.Invoke(ctx, PixService_FindPixKey_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, PixService_Find_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +61,8 @@ func (c *pixServiceClient) FindPixKey(ctx context.Context, in *PixKey, opts ...g
 // All implementations must embed UnimplementedPixServiceServer
 // for forward compatibility
 type PixServiceServer interface {
-	RegisterPixKey(context.Context, *PixKeyRegistration) (*PixKeyCreatedResult, error)
-	FindPixKey(context.Context, *PixKey) (*PixKeyInfo, error)
+	Register(context.Context, *PixKeyRegistration) (*PixKeyCreatedResult, error)
+	Find(context.Context, *PixKey) (*PixKeyInfo, error)
 	mustEmbedUnimplementedPixServiceServer()
 }
 
@@ -70,11 +70,11 @@ type PixServiceServer interface {
 type UnimplementedPixServiceServer struct {
 }
 
-func (UnimplementedPixServiceServer) RegisterPixKey(context.Context, *PixKeyRegistration) (*PixKeyCreatedResult, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterPixKey not implemented")
+func (UnimplementedPixServiceServer) Register(context.Context, *PixKeyRegistration) (*PixKeyCreatedResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedPixServiceServer) FindPixKey(context.Context, *PixKey) (*PixKeyInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindPixKey not implemented")
+func (UnimplementedPixServiceServer) Find(context.Context, *PixKey) (*PixKeyInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Find not implemented")
 }
 func (UnimplementedPixServiceServer) mustEmbedUnimplementedPixServiceServer() {}
 
@@ -89,38 +89,38 @@ func RegisterPixServiceServer(s grpc.ServiceRegistrar, srv PixServiceServer) {
 	s.RegisterService(&PixService_ServiceDesc, srv)
 }
 
-func _PixService_RegisterPixKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PixService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PixKeyRegistration)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PixServiceServer).RegisterPixKey(ctx, in)
+		return srv.(PixServiceServer).Register(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PixService_RegisterPixKey_FullMethodName,
+		FullMethod: PixService_Register_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PixServiceServer).RegisterPixKey(ctx, req.(*PixKeyRegistration))
+		return srv.(PixServiceServer).Register(ctx, req.(*PixKeyRegistration))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PixService_FindPixKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PixService_Find_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PixKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PixServiceServer).FindPixKey(ctx, in)
+		return srv.(PixServiceServer).Find(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PixService_FindPixKey_FullMethodName,
+		FullMethod: PixService_Find_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PixServiceServer).FindPixKey(ctx, req.(*PixKey))
+		return srv.(PixServiceServer).Find(ctx, req.(*PixKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -133,12 +133,12 @@ var PixService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PixServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterPixKey",
-			Handler:    _PixService_RegisterPixKey_Handler,
+			MethodName: "Register",
+			Handler:    _PixService_Register_Handler,
 		},
 		{
-			MethodName: "FindPixKey",
-			Handler:    _PixService_FindPixKey_Handler,
+			MethodName: "Find",
+			Handler:    _PixService_Find_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

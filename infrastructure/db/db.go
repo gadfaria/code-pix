@@ -30,32 +30,18 @@ func ConnectDB(env string) *gorm.DB {
 	var db *gorm.DB
 	var err error
 
+	var dialector gorm.Dialector
+	var dsn string
+
 	if env != "test" {
-		dsn := os.Getenv("dsn")
-		var dialector gorm.Dialector
-		switch os.Getenv("dbType") {
-		case "postgres":
-			dialector = postgres.Open(dsn)
-		case "sqlite":
-			dialector = sqlite.Open(dsn)
-		default:
-			log.Fatalf("Invalid database type: %s", os.Getenv("dbType"))
-		}
-		db, err = gorm.Open(dialector, &gorm.Config{})
+		dsn = os.Getenv("dsn")
+		dialector = postgres.Open(dsn)
 	} else {
-		dsn := os.Getenv("dsnTest")
-		var dialector gorm.Dialector
-		switch os.Getenv("dbTypeTest") {
-		case "postgres":
-			println("entrou aqui")
-			dialector = postgres.Open(dsn)
-		case "sqlite":
-			dialector = sqlite.Open(dsn)
-		default:
-			log.Fatalf("Invalid database type: %s", os.Getenv("dbTypeTest"))
-		}
-		db, err = gorm.Open(dialector, &gorm.Config{})
+		dsn = os.Getenv("dsnTest")
+		dialector = sqlite.Open(dsn)
 	}
+
+	db, err = gorm.Open(dialector, &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)

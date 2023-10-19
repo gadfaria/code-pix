@@ -30,7 +30,7 @@ type Transaction struct {
 	AccountFrom       *Account `valid:"-"`
 	AccountFromID     string   `gorm:"column:account_from_id;type:uuid;not null" valid:"-"`
 	Amount            float64  `json:"amount" gorm:"type:float" valid:"notnull"`
-	PixKeyTo          *PixKey  `gorm:"foreignkey:PixKeyIdTo"` // `valid:"-"` ?
+	PixKeyTo          *PixKey  `valid:"-"` //`gorm:"foreignkey:PixKeyIdTo"` ?
 	PixKeyIdTo        string   `gorm:"column:pix_key_id_to;type:uuid;not null" valid:"-"`
 	Description       string   `json:"description" gorm:"type:varchar(255)" valid:"-"`
 	Status            string   `json:"status" gore:"type:varchar(20)" valid:"notnull"`

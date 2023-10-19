@@ -8,10 +8,11 @@ import (
 
 	"github.com/gadfaria/code-pix/domain/model"
 
-	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	_ "gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func init() {
@@ -26,16 +27,34 @@ func init() {
 }
 
 func ConnectDB(env string) *gorm.DB {
-	var dsn string
 	var db *gorm.DB
 	var err error
 
 	if env != "test" {
-		dsn = os.Getenv("dsn")
-		db, err = gorm.Open(os.Getenv("dbType"), dsn)
+		dsn := os.Getenv("dsn")
+		var dialector gorm.Dialector
+		switch os.Getenv("dbType") {
+		case "postgres":
+			dialector = postgres.Open(dsn)
+		case "sqlite":
+			dialector = sqlite.Open(dsn)
+		default:
+			log.Fatalf("Invalid database type: %s", os.Getenv("dbType"))
+		}
+		db, err = gorm.Open(dialector, &gorm.Config{})
 	} else {
-		dsn = os.Getenv("dsnTest")
-		db, err = gorm.Open(os.Getenv("dbTypeTest"), dsn)
+		dsn := os.Getenv("dsnTest")
+		var dialector gorm.Dialector
+		switch os.Getenv("dbTypeTest") {
+		case "postgres":
+			println("entrou aqui")
+			dialector = postgres.Open(dsn)
+		case "sqlite":
+			dialector = sqlite.Open(dsn)
+		default:
+			log.Fatalf("Invalid database type: %s", os.Getenv("dbTypeTest"))
+		}
+		db, err = gorm.Open(dialector, &gorm.Config{})
 	}
 
 	if err != nil {
@@ -44,7 +63,7 @@ func ConnectDB(env string) *gorm.DB {
 	}
 
 	if os.Getenv("debug") == "true" {
-		db.LogMode(true)
+		db = db.Debug()
 	}
 
 	if os.Getenv("AutoMigrateDb") == "true" {

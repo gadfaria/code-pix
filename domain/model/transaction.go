@@ -31,50 +31,54 @@ type Transaction struct {
 	AccountFromID     string   `gorm:"column:account_from_id;type:uuid;not null" valid:"-"`
 	Amount            float64  `json:"amount" gorm:"type:float" valid:"notnull"`
 	PixKeyTo          *PixKey  `valid:"-"`
-	PixKeyIDTo        string   `gorm:"column:pix_key_id_to;type:uuid;not null" valid:"-"`
+	PixKeyIdTo        string   `gorm:"column:pix_key_id_to;type:uuid;not null" valid:"-"`
 	Description       string   `json:"description" gorm:"type:varchar(255)" valid:"-"`
 	Status            string   `json:"status" gore:"type:varchar(20)" valid:"notnull"`
 	CancelDescription string   `json:"cancel_description" gorm:"type:varchar(255)" valid:"-"`
 }
 
-func (transaction *Transaction) isValid() error {
-	_, err := govalidator.ValidateStruct(transaction)
+func (t *Transaction) isValid() error {
+	_, err := govalidator.ValidateStruct(t)
+
 	if err != nil {
 		return err
 	}
 
-	if transaction.Amount <= 0 {
+	if t.Amount <= 0 {
 		return errors.New("the amount must be greater than 0")
 	}
 
-	if transaction.Status != TransactionPending && transaction.Status != TransactionCompleted && transaction.Status != TransactionConfirmed && transaction.Status != TransactionCanceled {
+	if t.Status != TransactionPending && t.Status != TransactionCompleted && t.Status != TransactionCanceled && t.Status != TransactionConfirmed {
 		return errors.New("invalid status for the transaction")
 	}
 
-	if transaction.PixKeyTo.AccountID == transaction.AccountFrom.ID {
+	if t.PixKeyTo.AccountID == t.AccountFromID {
 		return errors.New("the source and destination account cannot be the same")
 	}
 
 	return nil
 }
 
-func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description string) (*Transaction, error) {
+func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description, id string) (*Transaction, error) {
 	transaction := Transaction{
-		AccountFrom: accountFrom,
-		Amount:      amount,
-		PixKeyTo:    pixKeyTo,
-		Description: description,
-		Status:      TransactionPending,
+		AccountFrom:   accountFrom,
+		AccountFromID: accountFrom.ID,
+		Amount:        amount,
+		PixKeyTo:      pixKeyTo,
+		PixKeyIdTo:    pixKeyTo.ID,
+		Status:        TransactionPending,
+		Description:   description,
 	}
-
-	transaction.ID = uuid.NewV4().String()
+	if id == "" {
+		transaction.ID = uuid.NewV4().String()
+	} else {
+		transaction.ID = id
+	}
 	transaction.CreatedAt = time.Now()
-
 	err := transaction.isValid()
 	if err != nil {
 		return nil, err
 	}
-
 	return &transaction, nil
 }
 

@@ -16,6 +16,11 @@ type PixKeyRepositoryInterface interface {
 	FindAccount(id string) (*Account, error)
 }
 
+const (
+	PixKeyStatusActive   string = "active"
+	PixKeyStatusInactive string = "inactive"
+)
+
 type PixKey struct {
 	Base      `valid:"required"`
 	Kind      string   `json:"kind" valid:"notnull"`
@@ -32,7 +37,7 @@ func (pixKey *PixKey) isValid() error {
 		return errors.New("invalid type of key")
 	}
 
-	if pixKey.Status != "active" && pixKey.Status != "inactive" {
+	if pixKey.Status != PixKeyStatusActive && pixKey.Status != PixKeyStatusInactive {
 		return errors.New("invalid status")
 	}
 
@@ -45,10 +50,11 @@ func (pixKey *PixKey) isValid() error {
 
 func NewPixKey(key, kind string, account *Account) (*PixKey, error) {
 	pixKey := PixKey{
-		Kind:    kind,
-		Key:     key,
-		Account: account,
-		Status:  "active",
+		Kind:      kind,
+		Key:       key,
+		Account:   account,
+		AccountID: account.ID,
+		Status:    PixKeyStatusActive,
 	}
 
 	pixKey.ID = uuid.NewV4().String()

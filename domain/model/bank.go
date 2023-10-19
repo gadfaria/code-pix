@@ -23,7 +23,7 @@ func (bank *Bank) isValid() error {
 	return nil
 }
 
-func NewBank(code string, name string) (*Bank, error) {
+func NewBank(code, name string) (*Bank, error) {
 	bank := Bank{
 		Code: code,
 		Name: name,

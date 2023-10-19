@@ -25,7 +25,7 @@ func (account *Account) isValid() error {
 	return nil
 }
 
-func NewAccount(bank *Bank, number string, ownerName string) (*Account, error) {
+func NewAccount(bank *Bank, number, ownerName string) (*Account, error) {
 	account := Account{
 		OwnerName: ownerName,
 		Bank:      bank,
